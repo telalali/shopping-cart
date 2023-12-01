@@ -1,0 +1,89 @@
+<%@page import="com.shoppingcart.model.*"%>
+<%@page import="com.shoppingcart.connection.DbCon"%>
+<%@page import="com.shoppingcart.doa.*" %>
+<%@page import="java.util.*"%>
+<%@page import="java.text.DecimalFormat"%>
+
+
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%> 
+<%
+	DecimalFormat dcf = new DecimalFormat("#.##");
+	request.setAttribute("dcf", dcf);
+
+	User auth = (User) request.getSession().getAttribute("auth");
+	
+	List<Order> orders = null;
+
+	if (auth != null){
+		request.setAttribute("auth", auth);
+		//OrderDoa oDoa = new OrderDoa(DbCon.getConnection());
+		orders = new OrderDoa(DbCon.getConnection()).userOrder(auth.getId());
+		//orders = oDoa.userOrders(auth.getId());
+	}else{
+		response.sendRedirect("login.jsp");
+	}
+	
+	ArrayList<Cart> cart_list = (ArrayList<Cart>) session.getAttribute("cart_list");
+	if (cart_list != null) {
+		request.setAttribute("cart_list", cart_list);
+	}
+%>
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Chech Out</title>
+</head>
+<body>
+
+<h2>Checkout</h2>
+    <div class="wrapper">
+        <div class="payment">
+            <div class="payment-logo">
+                <p>p</p>
+            </div>
+            <h2>Payment Gateway</h2>
+            <div class="form">
+                <div class="card space icon-relative">
+                    <label class="label">Card holder:</label>
+                    <input type="text" class="input" placeholder="Coding Market">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="card space icon-relative">
+                    <label class="label">Card number:</label>
+                    <input type="text" class="input" data-mask="0000 0000 0000 0000" placeholder="Card Number">
+                    <i class="far fa-credit-card"></i>
+                </div>
+                <div class="card-grp space">
+                    <div class="card-item icon-relative">
+                        <label class="label">Expiry date:</label>
+                        <input type="text" name="expiry-data" class="input" data-mask="00 / 00" placeholder="00 / 00">
+                        <i class="far fa-calendar-alt"></i>
+                    </div>
+                    <div class="card-item icon-relative">
+                        <label class="label">CVC:</label>
+                        <input type="text" class="input" data-mask="000" placeholder="000">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                </div>
+
+                <div class="btn">
+                    Pay
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
+
+
+
+</body>
+
+<%@include file ="includes/footer.jsp" %></body>
+</html>

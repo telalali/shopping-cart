@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Country Dropdown</title>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+</head>
+<body>
+
+    <label for="inputCountry">Select Country:</label>
+    <select id="inputCountry"></select>
+
+    <div id="countryList"></div>
+
+    <script>
+        // Simulate the data received from the server
+        var data = "<option>Country1</option><option>Country2</option><option>Country3</option>";
+
+        // Update the 'inputCountry' select options with the received data
+        $("#inputCountry").html(data);
+
+        // Example: You may want to trigger this on an event like a button click
+        $("#inputCountry").change(function() {
+            var selectedCountry = $(this).val();
+            $("#countryList").text("Selected Country: " + selectedCountry);
+        });
+    </script>
+
+</body>
+</html>
